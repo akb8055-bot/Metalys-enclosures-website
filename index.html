@@ -6,7 +6,9 @@
   <meta name="description" content="Metalys designs and manufactures precision sheet metal enclosures with fast turnaround and rigorous quality control.">
   <meta name="theme-color" content="#111410">
   <title>Metalys | Precision Enclosure Manufacturing</title>
-  <link rel="preconnect" href="https://img1.wsimg.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;1,600&family=DM+Sans:wght@400;500;600&family=Noto+Kufi+Arabic:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
 </head>
@@ -37,7 +39,11 @@
 
   <main id="main">
     <section class="hero" id="top">
-      <img class="hero-image" src="assets/hero/switchgear-room-4k.webp" alt="Technician testing industrial switchgear in a power distribution room" width="3840" height="2880" fetchpriority="high">
+      <picture>
+        <source type="image/avif" srcset="assets/hero/Hero_Image-960.avif 960w, assets/hero/Hero_Image-1536.avif 1536w" sizes="100vw">
+        <source type="image/webp" srcset="assets/hero/Hero_Image-960.webp 960w, assets/hero/Hero_Image-1536.webp 1536w" sizes="100vw">
+        <img class="hero-image" src="assets/hero/Hero_Image.png" alt="Precision industrial switchgear and control enclosures" width="1536" height="1024" decoding="async" fetchpriority="high">
+      </picture>
       <div class="hero-shade"></div>
       <div class="hero-grid" aria-hidden="true"></div>
       <div class="hero-content">
@@ -317,7 +323,7 @@
   <footer>
     <a class="brand footer-brand" href="#top"><img src="assets/metalys-logo.png" alt="Metalys Enclosures Manufacturing" width="120" height="120"></a>
     <p>Precision in quality. Efficiency in lead time. Excellence in service.</p>
-    <div><span>© <span data-year></span> Metalys Enclosures Manufacturing W.L.L.</span><a class="photo-credit" href="https://commons.wikimedia.org/wiki/File:Systems_testing_in_the_service_switchgear_room_of_a_power_substation_located_in_Queens._(CS179,_08-13-2018)_(44048210052).jpg" target="_blank" rel="noreferrer">Hero photo: MTA Capital Construction / CC BY 2.0</a></div>
+    <div><span>© <span data-year></span> Metalys Enclosures Manufacturing W.L.L.</span></div>
   </footer>
 
   <dialog class="quote-dialog" data-quote-dialog>

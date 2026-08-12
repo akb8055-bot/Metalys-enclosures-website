@@ -1,3 +1,5 @@
+document.documentElement.classList.add('js');
+
 const header = document.querySelector('[data-header]');
 const menuButton = document.querySelector('[data-menu-button]');
 const nav = document.querySelector('[data-nav]');
@@ -143,7 +145,6 @@ const arabicTranslations = {
   'Supporting industrial projects across the Kingdom.': 'ندعم المشاريع الصناعية في جميع أنحاء المملكة.',
   'Contact Us': 'اتصل بنا',
   'Precision in quality. Efficiency in lead time. Excellence in service.': 'دقة في الجودة. كفاءة في زمن الإنجاز. تميز في الخدمة.',
-  'Hero photo: MTA Capital Construction / CC BY 2.0': 'صورة الواجهة: MTA Capital Construction / CC BY 2.0',
   'Tell us what': 'أخبرنا بما',
   'you need built.': 'تحتاج إلى تصنيعه.',
   'Name': 'الاسم',
@@ -166,7 +167,7 @@ const languageAttributes = [
   [menuButton, 'aria-label', 'Open menu', 'فتح القائمة'],
   [nav, 'aria-label', 'Primary navigation', 'التنقل الرئيسي'],
   [document.querySelector('.language-switch'), 'aria-label', 'Language', 'اللغة'],
-  [document.querySelector('.hero-image'), 'alt', 'Technician testing industrial switchgear in a power distribution room', 'فني يختبر لوحات توزيع صناعية في غرفة توزيع الطاقة'],
+  [document.querySelector('.hero-image'), 'alt', 'Precision industrial switchgear and control enclosures', 'خزائن لوحات توزيع وتحكم صناعية دقيقة'],
   [document.querySelector('.hero-specs'), 'aria-label', 'Key capabilities', 'القدرات الرئيسية'],
   [document.querySelector('.icv-card img'), 'alt', 'Tawteen and QatarEnergy', 'توطين وقطر للطاقة'],
   [document.querySelector('[data-close-quote]'), 'aria-label', 'Close quote form', 'إغلاق نموذج عرض السعر'],
@@ -203,6 +204,40 @@ setLanguage(localStorage.getItem('metalys-language') || 'en');
 const updateHeader = () => header.classList.toggle('is-scrolled', window.scrollY > 24);
 updateHeader();
 window.addEventListener('scroll', updateHeader, { passive: true });
+
+const revealGroups = [
+  '.intro-copy > *',
+  '.capability',
+  '.products-heading > *',
+  '.product-sectors article',
+  '.process > *',
+  '.process-list li',
+  '.quality-heading > *',
+  '.quality-pillars article',
+  '.quality-promise',
+  '.compliance-heading > *',
+  '.standard-card',
+  '.downloads > *',
+  '.contact > *'
+];
+const revealElements = document.querySelectorAll(revealGroups.join(','));
+revealElements.forEach((element, index) => {
+  element.classList.add('scroll-reveal');
+  element.style.setProperty('--reveal-delay', `${(index % 4) * 55}ms`);
+});
+
+if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      observer.unobserve(entry.target);
+    });
+  }, { rootMargin: '0px 0px -8%', threshold: .08 });
+  revealElements.forEach((element) => revealObserver.observe(element));
+} else {
+  revealElements.forEach((element) => element.classList.add('is-visible'));
+}
 
 menuButton.addEventListener('click', () => {
   const isOpen = nav.classList.toggle('is-open');
