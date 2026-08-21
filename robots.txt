@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://akb8055-bot.github.io/Metalys-enclosures-website/sitemap.xml

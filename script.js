@@ -145,12 +145,49 @@ const arabicTranslations = {
   'Supporting industrial projects across the Kingdom.': 'ندعم المشاريع الصناعية في جميع أنحاء المملكة.',
   'Contact Us': 'اتصل بنا',
   'Precision in quality. Efficiency in lead time. Excellence in service.': 'دقة في الجودة. كفاءة في زمن الإنجاز. تميز في الخدمة.',
+  'Years of experience': 'عاماً من الخبرة',
+  'Square metre facility': 'متر مربع للمنشأة',
+  'Projects delivered': 'مشروعاً تم تسليمه',
+  'Skilled workforce': 'من الكوادر الماهرة',
+  'Built products.': 'منتجات منفذة.',
+  'Proven applications.': 'تطبيقات مثبتة.',
+  'Explore authentic product examples from the Metalys company profile. Select a range to inspect its application and begin a matching technical enquiry.': 'استكشف نماذج منتجات أصلية من الملف التعريفي لميتاليس. اختر فئة للاطلاع على تطبيقها وبدء استفسار فني مطابق.',
+  'Power distribution': 'توزيع الطاقة',
+  'Infrastructure': 'البنية التحتية',
+  'Industrial control': 'التحكم الصناعي',
+  'Marine systems': 'الأنظمة البحرية',
+  '01 / Power distribution': '01 / توزيع الطاقة',
+  '02 / Infrastructure': '02 / البنية التحتية',
+  '03 / Industrial control': '03 / التحكم الصناعي',
+  '04 / Marine systems': '04 / الأنظمة البحرية',
+  'LV Switchboards & MCC': 'لوحات الجهد المنخفض ومراكز التحكم بالمحركات',
+  'Outdoor & Floor Standing': 'الخزائن الخارجية والقائمة على الأرض',
+  'Stainless & Wall Mounted': 'خزائن الستانلس والمثبتة على الجدار',
+  'Marine Consoles & Battery Racks': 'وحدات التحكم البحرية وحوامل البطاريات',
+  'View product': 'عرض المنتج',
+  'Request this product': 'طلب هذا المنتج',
+  'Technical RFQ': 'طلب عرض فني',
   'Tell us what': 'أخبرنا بما',
   'you need built.': 'تحتاج إلى تصنيعه.',
   'Name': 'الاسم',
   'Work email': 'البريد الإلكتروني للعمل',
+  'Phone': 'الهاتف',
+  'Product category': 'فئة المنتج',
+  'Select a product': 'اختر منتجاً',
+  'Outdoor & Floor Standing Enclosures': 'الخزائن الخارجية والقائمة على الأرض',
+  'Stainless Steel & Wall Mounted': 'خزائن الفولاذ المقاوم للصدأ والمثبتة على الجدار',
+  'Custom / Other': 'مخصص / أخرى',
+  'Required quantity': 'الكمية المطلوبة',
+  'Delivery country': 'بلد التسليم',
+  'Required by': 'التاريخ المطلوب',
   'Project requirements': 'متطلبات المشروع',
-  'Prepare enquiry': 'إعداد الاستفسار'
+  'Technical files': 'الملفات الفنية',
+  'Choose DWG, PDF, STEP or RFQ file': 'اختر ملف DWG أو PDF أو STEP أو RFQ',
+  'Maximum 10 MB. One file or a ZIP package.': 'الحد الأقصى 10 ميجابايت. ملف واحد أو حزمة ZIP.',
+  'I consent to Metalys using these details to respond to this enquiry.': 'أوافق على استخدام ميتاليس لهذه البيانات للرد على هذا الاستفسار.',
+  'Submit technical RFQ': 'إرسال طلب العرض الفني',
+  'Or email us directly': 'أو راسلنا مباشرة',
+  'Privacy': 'الخصوصية'
 };
 
 const originalTextNodes = [];
@@ -161,6 +198,44 @@ while (textWalker.nextNode()) {
   if (arabicTranslations[key]) originalTextNodes.push({ node, original: node.nodeValue, key });
 }
 
+const productButtons = [...document.querySelectorAll('[data-product]')];
+let activeProductButton = productButtons[0];
+
+const renderProductDetail = (button = activeProductButton) => {
+  if (!button) return;
+  activeProductButton = button;
+  const isArabic = document.documentElement.lang === 'ar';
+  const detail = document.querySelector('[data-product-title]').closest('.product-detail');
+  const sourceImage = button.querySelector('img');
+  const title = isArabic ? button.dataset.titleAr : button.dataset.title;
+  const features = (isArabic ? button.dataset.featuresAr : button.dataset.features).split('|');
+
+  productButtons.forEach((productButton) => {
+    const isActive = productButton === button;
+    productButton.classList.toggle('is-active', isActive);
+    productButton.setAttribute('aria-selected', String(isActive));
+    productButton.tabIndex = isActive ? 0 : -1;
+    const productTitle = isArabic ? productButton.dataset.titleAr : productButton.dataset.title;
+    productButton.querySelector('img').alt = isArabic ? `مثال على ${productTitle}` : `${productTitle} product example`;
+  });
+
+  document.querySelector('[data-product-category]').textContent = isArabic ? button.dataset.categoryAr : button.dataset.category;
+  document.querySelector('[data-product-title]').textContent = title;
+  document.querySelector('[data-product-description]').textContent = isArabic ? button.dataset.descriptionAr : button.dataset.description;
+  document.querySelector('[data-product-features]').replaceChildren(...features.map((feature) => {
+    const item = document.createElement('li');
+    item.textContent = feature;
+    return item;
+  }));
+
+  const detailImage = document.querySelector('[data-product-image]');
+  detailImage.src = sourceImage.getAttribute('src');
+  detailImage.alt = isArabic ? `مثال على ${title}` : `${title} product example`;
+  detail.classList.remove('is-changing');
+  void detail.offsetWidth;
+  detail.classList.add('is-changing');
+};
+
 const languageAttributes = [
   [document.querySelector('.skip-link'), 'aria-label', 'Skip to content', 'تخطي إلى المحتوى'],
   [document.querySelector('.brand'), 'aria-label', 'Metalys home', 'الصفحة الرئيسية لميتاليس'],
@@ -169,9 +244,11 @@ const languageAttributes = [
   [document.querySelector('.language-switch'), 'aria-label', 'Language', 'اللغة'],
   [document.querySelector('.hero-image'), 'alt', 'Precision industrial switchgear and control enclosures', 'خزائن لوحات توزيع وتحكم صناعية دقيقة'],
   [document.querySelector('.hero-specs'), 'aria-label', 'Key capabilities', 'القدرات الرئيسية'],
+  [document.querySelector('.metrics-strip'), 'aria-label', 'Metalys manufacturing facts', 'حقائق التصنيع لدى ميتاليس'],
+  [document.querySelector('.product-gallery'), 'aria-label', 'Product range', 'مجموعة المنتجات'],
   [document.querySelector('.icv-card img'), 'alt', 'Tawteen and QatarEnergy', 'توطين وقطر للطاقة'],
   [document.querySelector('[data-close-quote]'), 'aria-label', 'Close quote form', 'إغلاق نموذج عرض السعر'],
-  [document.querySelector('textarea[name="requirements"]'), 'placeholder', 'Material, dimensions, quantity, finish...', 'المادة، الأبعاد، الكمية، التشطيب...']
+  [document.querySelector('textarea[name="requirements"]'), 'placeholder', 'Material, dimensions, IP rating, finish, standards...', 'المادة، الأبعاد، تصنيف IP، التشطيب، المعايير...']
 ];
 
 const setLanguage = (language) => {
@@ -192,6 +269,7 @@ const setLanguage = (language) => {
   document.querySelectorAll('[data-language]').forEach((button) => {
     button.setAttribute('aria-pressed', String(button.dataset.language === language));
   });
+  renderProductDetail();
   localStorage.setItem('metalys-language', language);
 };
 
@@ -207,9 +285,11 @@ window.addEventListener('scroll', updateHeader, { passive: true });
 
 const revealGroups = [
   '.intro-copy > *',
+  '.metrics-strip > *',
   '.capability',
   '.products-heading > *',
-  '.product-sectors article',
+  '.product-card',
+  '.product-detail',
   '.process > *',
   '.process-list li',
   '.quality-heading > *',
@@ -239,17 +319,48 @@ if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-mot
   revealElements.forEach((element) => element.classList.add('is-visible'));
 }
 
+const mobileNavigation = window.matchMedia('(max-width: 850px)');
+const syncNavigationAccessibility = () => {
+  nav.inert = mobileNavigation.matches && !nav.classList.contains('is-open');
+};
+syncNavigationAccessibility();
+mobileNavigation.addEventListener('change', syncNavigationAccessibility);
+
 menuButton.addEventListener('click', () => {
   const isOpen = nav.classList.toggle('is-open');
   menuButton.setAttribute('aria-expanded', String(isOpen));
+  syncNavigationAccessibility();
 });
 
 nav.addEventListener('click', (event) => {
   if (event.target.closest('a')) {
     nav.classList.remove('is-open');
     menuButton.setAttribute('aria-expanded', 'false');
+    syncNavigationAccessibility();
   }
 });
+
+document.addEventListener('keydown', (event) => {
+  if (event.key !== 'Escape' || !nav.classList.contains('is-open')) return;
+  nav.classList.remove('is-open');
+  menuButton.setAttribute('aria-expanded', 'false');
+  syncNavigationAccessibility();
+  menuButton.focus();
+});
+
+productButtons.forEach((button, index) => {
+  button.addEventListener('click', () => renderProductDetail(button));
+  button.addEventListener('keydown', (event) => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    const direction = document.documentElement.dir === 'rtl' ? -1 : 1;
+    let nextIndex = event.key === 'Home' ? 0 : event.key === 'End' ? productButtons.length - 1 : index + (event.key === 'ArrowRight' ? direction : -direction);
+    nextIndex = (nextIndex + productButtons.length) % productButtons.length;
+    renderProductDetail(productButtons[nextIndex]);
+    productButtons[nextIndex].focus();
+  });
+});
+renderProductDetail();
 
 document.querySelectorAll('[data-capability]').forEach((item) => {
   item.querySelector('button').addEventListener('click', () => {
@@ -273,22 +384,39 @@ document.querySelectorAll('[data-open-quote]').forEach((button) => {
   button.addEventListener('click', () => dialog.showModal());
 });
 
+document.querySelector('[data-product-rfq]').addEventListener('click', () => {
+  const select = document.querySelector('[data-product-select]');
+  select.value = activeProductButton.dataset.title;
+  dialog.showModal();
+});
+
 document.querySelector('[data-close-quote]').addEventListener('click', () => dialog.close());
 dialog.addEventListener('click', (event) => {
   if (event.target === dialog) dialog.close();
 });
 
-document.querySelector('[data-quote-form]').addEventListener('submit', (event) => {
-  event.preventDefault();
-  const data = new FormData(event.currentTarget);
-  const isArabic = document.documentElement.lang === 'ar';
-  const subject = isArabic
-    ? `استفسار عن الخزائن من ${data.get('company') || data.get('name')}`
-    : `Enclosure enquiry from ${data.get('company') || data.get('name')}`;
-  const body = isArabic
-    ? `الاسم: ${data.get('name')}\nالبريد الإلكتروني: ${data.get('email')}\nالشركة: ${data.get('company') || 'غير مذكور'}\n\nمتطلبات المشروع:\n${data.get('requirements')}`
-    : `Name: ${data.get('name')}\nEmail: ${data.get('email')}\nCompany: ${data.get('company') || 'Not provided'}\n\nProject requirements:\n${data.get('requirements')}`;
-  window.location.href = `mailto:adithya.krishnan@metalys.qa?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+const rfqFile = document.querySelector('[data-rfq-file]');
+const fileLabel = document.querySelector('[data-file-label]');
+rfqFile.addEventListener('change', () => {
+  const file = rfqFile.files[0];
+  rfqFile.setCustomValidity('');
+  fileLabel.textContent = file ? file.name : (document.documentElement.lang === 'ar' ? arabicTranslations['Choose DWG, PDF, STEP or RFQ file'] : 'Choose DWG, PDF, STEP or RFQ file');
 });
+
+document.querySelector('[data-quote-form]').addEventListener('submit', (event) => {
+  const file = rfqFile.files[0];
+  if (!file || file.size <= 10 * 1024 * 1024) return;
+  event.preventDefault();
+  const message = document.documentElement.lang === 'ar' ? 'يجب ألا يتجاوز حجم الملف 10 ميجابايت.' : 'The technical file must be 10 MB or smaller.';
+  rfqFile.setCustomValidity(message);
+  rfqFile.reportValidity();
+});
+
+if (new URLSearchParams(window.location.search).get('enquiry') === 'sent') {
+  const notice = document.createElement('p');
+  notice.className = 'enquiry-success';
+  notice.textContent = document.documentElement.lang === 'ar' ? 'تم إرسال طلب العرض الفني. سيتواصل فريق ميتاليس معك قريباً.' : 'Your technical RFQ has been sent. The Metalys team will contact you shortly.';
+  document.querySelector('.contact-action').prepend(notice);
+}
 
 document.querySelector('[data-year]').textContent = new Date().getFullYear();

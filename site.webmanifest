@@ -1,0 +1,16 @@
+{
+  "name": "Metalys Enclosures Manufacturing",
+  "short_name": "Metalys",
+  "description": "Precision sheet metal enclosures and switchgear solutions built in Qatar.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f2f3f3",
+  "theme_color": "#11161a",
+  "icons": [
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
