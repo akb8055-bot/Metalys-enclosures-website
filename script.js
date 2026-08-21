@@ -165,6 +165,7 @@ const arabicTranslations = {
   'Stainless & Wall Mounted': 'خزائن الستانلس والمثبتة على الجدار',
   'Marine Consoles & Battery Racks': 'وحدات التحكم البحرية وحوامل البطاريات',
   'View product': 'عرض المنتج',
+  'Open 4K image': 'فتح الصورة بدقة 4K',
   'Request this product': 'طلب هذا المنتج',
   'Technical RFQ': 'طلب عرض فني',
   'Tell us what': 'أخبرنا بما',
@@ -229,8 +230,11 @@ const renderProductDetail = (button = activeProductButton) => {
   }));
 
   const detailImage = document.querySelector('[data-product-image]');
-  detailImage.src = sourceImage.getAttribute('src');
+  detailImage.src = sourceImage.currentSrc || sourceImage.getAttribute('src');
   detailImage.alt = isArabic ? `مثال على ${title}` : `${title} product example`;
+  const fullImageLink = document.querySelector('[data-product-full]');
+  fullImageLink.href = button.dataset.full;
+  fullImageLink.setAttribute('aria-label', isArabic ? `فتح صورة ${title} بدقة 4K` : `Open ${title} image in 4K`);
   detail.classList.remove('is-changing');
   void detail.offsetWidth;
   detail.classList.add('is-changing');
